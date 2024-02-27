@@ -1,6 +1,6 @@
 For our "Sinterklaas surprise" of 2020 I made a small table from scaffolding wood we had lying around. I only have this one picture of it.
 
-![Small picknick table](./picnic-table.jpeg)
+<image src="picnic-table.jpeg" width="300" />
 
 A few notes on how it was made:
 1. The table legs contain notches by which they have been partially slid into each other.
