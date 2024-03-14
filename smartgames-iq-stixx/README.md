@@ -13,3 +13,5 @@ This resulted in a bad fitting with the other pieces.
 After some more measuring and tinkering a working version was made, including some ♥
 
 <image src="WhatsApp Image 2023-12-26 at 14.28.27.jpeg" width="300" />
+
+[A STL export is available.](iq_stixx_piece.stl)
