@@ -8,6 +8,8 @@ We had a pot that always left a wet spot on the windowsill. And I wanted to make
 1) Which was converted to a [SVG file](coaster_idea.svg) with some online tool.
 1) Importing this into [Tinkercad](https://www.tinkercad.com/) it could be used for a 3D design.
 
+On the sides there are notches created by the feet that would otherwise be sticking out of the design. The hope is these notches create enough ventilation to get rid of the moisture appearing beneath the pot.
+
 <image src="coaster.jpeg" width="300" />
 
 And it fits nicely below the pot.
