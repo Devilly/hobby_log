@@ -12,9 +12,9 @@ The code on the hub is [Pybricks](https://pybricks.com/) MicroPython.
 
 [host.py](./host.py) contains the code to run on a pc. [brick.py](./brick.py) has the code to be put on the LEGO hub. This was tested with a hub running Pybricks MicroPython `v1.20.0-23-g6c633a8dd on 2024-04-11`.
 
-The host gives output of the execution in the form of graphs showing data used in the PID algorithm. Following are a video of a test run followed by the corresponding graphs.
+The host gives output of the execution in the form of graphs showing data used in the PID algorithm. An example, failing, run can be seen [here](./video.mp4) and below are the corresponding graphs.
 
-<video src="./video.mp4" controls="controls" width="300"></video>
+<video src="" controls="controls" width="300"></video>
 
 <image src="./graphs.png" width="300" />
 
