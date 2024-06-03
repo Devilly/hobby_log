@@ -4,7 +4,10 @@ Having a Raspberry Pi 3B+ (determined via `cat /proc/cpuinfo`) as well as a Rasp
 
 See below images for the gist of it:
 
-<image src="" width="300" />
+<image src="PXL_20240603_180951494.jpg" width="300" />
+<image src="PXL_20240603_181025940.jpg" width="300" />
+<image src="PXL_20240603_181116426.jpg" width="300" />
+<image src="PXL_20240603_181134576.jpg" width="300" />
 
 After having build the setup I followed these steps to get to a timelapse GIF:
 1) Connected USB device
@@ -16,13 +19,31 @@ After having build the setup I followed these steps to get to a timelapse GIF:
 
     ```bash
     #!/bin/bash
-    rpicam-still -o /home/rpi/small-usb/timelapse/$(date +"%Y-%m-%d_%H-%M-%S-%N").jpg &> /home/rpi/projects/log.txt
-    ```
-    
-1) Being in the directory of the images, created an animated GIF with `convert -delay 10 -loop 0 "./*.jpg" animation.gif`
-1) Being in the directory of the images, created an MP4 video with `ffmpeg -r 10 -f image2 -pattern_type glob -i '*.jpg' -s 4608x2592 -vcodec libx264 timelapse.mp4`
+    DATE=$(date +"%Y-%m-%d_%H-%M-%S-%N")
+    LOG_FILE='/home/rpi/projects/log.txt'
 
-1) `* * * * * rpicam-still -o /home/rpi/small-usb/timelapse/$(date +"%Y-%m-%d_%H-%M-%S-%N").jpg`
+    cat << END >> $LOG_FILE
+    ##### SNAP $DATE
+
+    END
+
+    rpicam-still --nopreview -o /home/rpi/small-usb/timelapse/$DATE.jpg >> $LOG_FILE 2>&1
+
+    echo $'\n' >> $LOG_FILE
+    ```
+
+    1) Used `watch ls` to monitor the generation of new image files
+    1) The generated image files can be found in the [test-run](./test-run/) directory
+
+1) Copied the resulting files to my Windows 10 computer, using `scp -r rpi@rpi:~/small-usb/timelapse/* .`
+1) With [WSL](https://learn.microsoft.com/en-us/windows/wsl/) being in the directory where the files were copied, created an animated GIF with `convert -delay 30 -loop 0 "./*.jpg" animation.gif`
+
+    The result is as follows:
+    <image src="./test-run/animation.gif" width="300" />
+
+1) With WSL being in the directory where the files were copied, created a MP4 video with `ffmpeg -framerate 3.3 -pattern_type glob -i '*.jpg' video.mp4`
+
+    The result can be seen [here](./test-run/video.mp4)
 
 ## References
 
