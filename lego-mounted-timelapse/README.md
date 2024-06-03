@@ -39,6 +39,7 @@ After having build the setup I followed these steps to get to a timelapse GIF:
 1) With [WSL](https://learn.microsoft.com/en-us/windows/wsl/) being in the directory where the files were copied, created an animated GIF with `convert -delay 30 -loop 0 "./*.jpg" animation.gif`
 
     The result is as follows:
+    
     <image src="./test-run/animation.gif" width="300" />
 
 1) With WSL being in the directory where the files were copied, created a MP4 video with `ffmpeg -framerate 3.3 -pattern_type glob -i '*.jpg' video.mp4`
