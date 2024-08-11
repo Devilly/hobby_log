@@ -1,0 +1,16 @@
+POST https://api.stability.ai/v2beta/stable-image/generate/sd3
+accept: image/*
+Authorization: {{stability-api-key}}
+Content-Type: multipart/form-data; boundary=eiouydfhskjfksc
+
+eiouydfhskjfksc
+Content-Disposition: form-data; name="prompt"
+
+give the person a real sword
+
+
+eiouydfhskjfksc
+
+###
+
+curl "https://api.stability.ai/v2beta/stable-image/generate/sd3" 
