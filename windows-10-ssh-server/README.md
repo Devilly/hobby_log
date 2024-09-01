@@ -1,12 +1,11 @@
 # OpenSSH on Windows 10
 
 To enable SSH'ing to a Windows 10 machine follow these steps:
-* Go to...
-    * Start
-    * Settings
-    * System
-    * Optional features
-* Enable OpenSSH server
+* Go to (Start > Settings > System) Optional features
+    * Install OpenSSH server
+* Go to Services
+    * Enable OpenSSH SSH server
+    * Startup Type can be set to automatic to automatically run the server on restarts
 
 To enable SSH key login disable the lines
 
