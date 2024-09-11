@@ -10,8 +10,14 @@ var color_socket = WebSocketPeer.new()
 var body_socket = WebSocketPeer.new()
 
 func _ready():
-	color_socket.connect_to_url("ws://localhost:1337/color")
-	body_socket.connect_to_url("ws://localhost:1337/body")
+	var format_string = "ws://%s:1337/%s"
+	var host = OS.get_environment("KINECT_WEBSOCKET_SERVER_HOST")
+	
+	print("WS format string: ", format_string)
+	print("WS server host: ", host)
+	
+	color_socket.connect_to_url(format_string % [host, "color"])
+	body_socket.connect_to_url(format_string % [host, "body"])
 
 func _process(_delta):
 	var color_data = process_socket(color_socket)
