@@ -107,17 +107,26 @@ difference() {
 }
  
  // lid
- translate([300, heightContainer / 2, heightLid / 2])
- union()
- {
-     minkowski()
-    {
-        cube([widthContainer - 2 * rounding, heightContainer - 2 * rounding, heightLid - 2], true);
-        cylinder(2, r=rounding, center=true);
-    }
+translate([300, heightContainer / 2, heightLid / 2])
+union()
+{
+    printMargin = 2;
     
-    printMargin = 1;
+    cube([widthContainer - 2 * rounding - printMargin, heightContainer - 2 * rounding - printMargin, heightLid - printMargin], true);
     
     translate([0, 0, heightLid - printMargin])
-    cube([widthContainer - 2 * rounding - printMargin, heightContainer - 2 * rounding - printMargin, heightLid - printMargin], true);
+    difference()
+    {
+        minkowski()
+        {
+            cube([widthContainer - 2 * rounding, heightContainer - 2 * rounding, heightLid - 2], true);
+            cylinder(2, r=rounding, center=true);
+        }
+        
+        textSize = 20;
+    
+        translate([0, 0, heightLid / 2 - heightLid / 4])
+        linear_extrude()
+        text("Pokémon", size=textSize, font="Pocket Monk", halign="center", valign="center");
+    }
 }
