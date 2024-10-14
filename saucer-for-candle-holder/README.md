@@ -3,10 +3,10 @@
 Created a saucer for a candle holder so that it doesn't scratch our windowsill.
 
 The underside of the holder without saucer:
-<image src="pre.jpg" width="300" />
+<image src="pre.jpeg" width="300" />
 
 And here with the saucer embedded:
-<image src="post.jpg" width="300" />
+<image src="post.jpeg" width="300" />
 
 Files used:
 * [OpenSCAD design](./saucer.scad)
