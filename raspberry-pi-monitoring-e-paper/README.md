@@ -2,6 +2,10 @@
 
 My Raspberry Pi sometimes fails on me without me knowing and I just bought an e-paper display so I came up with the idea of doing some kind of monitoring on the display.
 
+The physical connections between the Raspberry and the e-paper screen were done according to this image:
+
+<image src="connections.png" width="300" />
+
 The commands needed to setup the Python environment are as follows:
 
 ```
@@ -23,6 +27,10 @@ To test whether the graphs actually work I use `stress-ng`, e.g. for upping the 
 and for the memory usage
 
     stress-ng --vm 1 --vm-bytes 30% --vm-keep
+
+After doing a few of the "stress tests" I got this:
+
+<image src="result.jpeg" width="300" />
 
 ## References
 * [2.13inch e-Paper HAT Manual](https://www.waveshare.com/wiki/2.13inch_e-Paper_HAT_Manual#Overview)
