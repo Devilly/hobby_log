@@ -69,3 +69,19 @@ negativeX = "right_stick_left"
 positiveX = "right_stick_right"
 negativeY = "right_stick_up"
 positiveY = "right_stick_down"
+
+[node name="meta-home" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(500, 100)
+action = "meta_home"
+
+[node name="meta-feature" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(500, 200)
+action = "meta_feature"
+
+[node name="meta-back" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(450, 150)
+action = "meta_back"
+
+[node name="meta-start" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(550, 150)
+action = "meta_start"
