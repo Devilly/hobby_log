@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://bef3mxeb511h1"]
+
+[ext_resource type="Script" path="res://src/Main.cs" id="1_jhs0s"]
+[ext_resource type="PackedScene" uid="uid://ckpun7spg3ei" path="res://src/components/button.tscn" id="2_hghqa"]
+[ext_resource type="PackedScene" uid="uid://dcq81neinf0dy" path="res://src/components/trigger.tscn" id="3_1neb1"]
+[ext_resource type="PackedScene" uid="uid://dg22x56twagpp" path="res://src/components/stick.tscn" id="4_i4fer"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_jhs0s")
+
+[node name="dpad-left" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(150, 300)
+action = "direction_left"
+
+[node name="dpad-up" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(200, 250)
+action = "direction_up"
+
+[node name="dpad-right" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(250, 300)
+action = "direction_right"
+
+[node name="dpad-down" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(200, 350)
+action = "direction_down"
+
+[node name="action_left" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(750, 300)
+action = "action_left"
+
+[node name="action_up" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(800, 250)
+action = "action_up"
+
+[node name="action_right" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(850, 300)
+action = "action_right"
+
+[node name="action_down" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(800, 350)
+action = "action_down"
+
+[node name="shoulder_trigger_left" parent="." instance=ExtResource("3_1neb1")]
+position = Vector2(200, 50)
+action = "shoulder_trigger_left"
+
+[node name="shoulder_trigger_right" parent="." instance=ExtResource("3_1neb1")]
+position = Vector2(800, 50)
+action = "shoulder_trigger_right"
+
+[node name="shoulder_button_left" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(200, 150)
+action = "shoulder_button_left"
+
+[node name="shoulder_button_right" parent="." instance=ExtResource("2_hghqa")]
+position = Vector2(800, 150)
+action = "shoulder_button_right"
+
+[node name="joystick_left" parent="." instance=ExtResource("4_i4fer")]
+position = Vector2(400, 400)
+negativeX = "left_stick_left"
+positiveX = "left_stick_right"
+negativeY = "left_stick_up"
+positiveY = "left_stick_down"
+
+[node name="joystick_right" parent="." instance=ExtResource("4_i4fer")]
+position = Vector2(600, 400)
+negativeX = "right_stick_left"
+positiveX = "right_stick_right"
+negativeY = "right_stick_up"
+positiveY = "right_stick_down"
