@@ -1,12 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bef3mxeb511h1"]
+[gd_scene load_steps=4 format=3 uid="uid://bef3mxeb511h1"]
 
-[ext_resource type="Script" path="res://src/Main.cs" id="1_jhs0s"]
 [ext_resource type="PackedScene" uid="uid://ckpun7spg3ei" path="res://src/components/button.tscn" id="2_hghqa"]
 [ext_resource type="PackedScene" uid="uid://dcq81neinf0dy" path="res://src/components/trigger.tscn" id="3_1neb1"]
 [ext_resource type="PackedScene" uid="uid://dg22x56twagpp" path="res://src/components/stick.tscn" id="4_i4fer"]
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_jhs0s")
 
 [node name="dpad-left" parent="." instance=ExtResource("2_hghqa")]
 position = Vector2(150, 300)
