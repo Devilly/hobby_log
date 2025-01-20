@@ -110,7 +110,7 @@ difference() {
 translate([300, heightContainer / 2, heightLid / 2])
 union()
 {
-    printMargin = 2;
+    printMargin = .5;
     
     cube([widthContainer - 2 * rounding - printMargin, heightContainer - 2 * rounding - printMargin, heightLid - printMargin], true);
     
