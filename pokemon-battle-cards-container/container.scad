@@ -112,7 +112,40 @@ union()
 {
     printMargin = .5;
     
-    cube([widthContainer - 2 * rounding - printMargin, heightContainer - 2 * rounding - printMargin, heightLid - printMargin], true);
+    rotate([0, 180, 0])
+    {
+        difference()
+        {
+            cube([
+                widthContainer - 2 * rounding - printMargin,
+                heightContainer - 2 * rounding - printMargin,
+                heightLid - printMargin
+            ], true);
+         
+            texts = [
+                "1. Pak kaart",
+                "2. Plaats basic Pokémon(s) in bench",
+                "3. Ken energy toe",
+                "4. Haal actieve Pokémon terug",
+                "5. Evolueer Pokémon(s)",
+                "6. Speel trainerkaart(en)",
+                "7. Val aan!",
+                "",
+                "1-6. Gebruik abilities"
+            ];
+            textSize = 6;
+            
+            for (i = [0 : len(texts) - 1]) {
+                translate([
+                    -(widthContainer - 2 * rounding - printMargin) / 2 + 5,
+                    ((heightContainer - 2 * rounding - printMargin) / 2) - i * (textSize * 1.72) - 5,
+                    0
+                ])
+                linear_extrude()
+                text(texts[i], size=textSize, font="Pocket Monk", halign="left", valign="top");
+            }        
+        }
+    }
     
     translate([0, 0, heightLid - printMargin])
     difference()
