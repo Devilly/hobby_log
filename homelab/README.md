@@ -21,6 +21,19 @@ The homelab is made up of different machines. Below these are described.
 ### Reverse proxy server
 
 * [Caddy](https://caddyserver.com/) is used as a reverse proxy to forward traffic to the [Hosting server](#hosting-server).
+* Using ethernet instead of Wi-Fi is configured via a [Netplan](https://netplan.io/) file in `/etc/netplan/` which should contain following YAML:
+
+```yaml
+network:
+    version: 2
+    ethernets:
+        renderer: networkd
+        eth0:
+            dhcp4: true
+```
+* Debugging network connections can be done by...
+    * listing the available hardware with [lshw](https://linux.die.net/man/1/lshw).
+    * showing the available network interface with `ip link`, see [docs](https://linux.die.net/man/8/ip).
 
 ### Hosting server
 
