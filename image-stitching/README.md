@@ -16,5 +16,4 @@ resulted in
 
 <image src="result.jpg" width="500" />
 
-## References
-* An alternative could be [Hugin](https://hugin.sourceforge.io/) but I didn't get this to work immediately.
+An alternative to the stitching library could be [Hugin](https://hugin.sourceforge.io/) but installing that via `brew` didn't work nicely and I left it at that.
