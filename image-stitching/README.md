@@ -15,3 +15,6 @@ Using the [stitching library](https://github.com/OpenStitching/stitching) I've t
 resulted in
 
 <image src="result.jpg" width="500" />
+
+## References
+* An alternative could be [Hugin](https://hugin.sourceforge.io/) but I didn't get this to work immediately.
