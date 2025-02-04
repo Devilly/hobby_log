@@ -110,17 +110,20 @@ difference() {
 translate([300, heightContainer / 2, heightLid / 2])
 union()
 {
-    printMargin = .5;
+    printMargin = .3;
     
     rotate([0, 180, 0])
     {
         difference()
         {
             cube([
-                widthContainer - 2 * rounding - printMargin,
-                heightContainer - 2 * rounding - printMargin,
+                widthContainer - 2 * widthWall - 2 * printMargin,
+                heightContainer - 2 * widthWall - 2 * printMargin,
                 heightLid - printMargin
             ], true);
+            
+            echo("lalalaala");
+            echo(heightLid - printMargin);
          
             texts = [
                 "1. Pak kaart",
@@ -134,14 +137,14 @@ union()
                 "1-6. Gebruik abilities"
             ];
             textSize = 6;
-            
+
             for (i = [0 : len(texts) - 1]) {
                 translate([
-                    -(widthContainer - 2 * rounding - printMargin) / 2 + 5,
-                    ((heightContainer - 2 * rounding - printMargin) / 2) - i * (textSize * 1.72) - 5,
-                    0
+                    -(widthContainer - 2 * widthWall - 2 * printMargin) / 2 + 5,
+                    ((heightContainer - 2 * widthWall - 2 * printMargin) / 2) - i * (textSize * 1.72) - 5,
+                    (heightLid - printMargin) / 2 - 1 + 0.01
                 ])
-                linear_extrude()
+                linear_extrude(1)
                 text(texts[i], size=textSize, font="Pocket Monk", halign="left", valign="top");
             }        
         }
@@ -152,7 +155,7 @@ union()
     {
         minkowski()
         {
-            cube([widthContainer - 2 * rounding, heightContainer - 2 * rounding, heightLid - 2], true);
+            cube([widthContainer - 2 * widthWall, heightContainer - 2 * widthWall, heightLid - 2], true);
             cylinder(2, r=rounding, center=true);
         }
         
