@@ -3,19 +3,19 @@ using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
 
-public struct Frame
+public record Frame
 {
 	public IList<Body> bodies { get; init; }
 }
 
-public struct Body
+public record Body
 {
 	public int bodyIndex { get; init; }
 	public bool tracked { get; init; }
 	public IList<Joint> joints { get; init; }
 }
 
-public struct Joint
+public record Joint
 {
 	public int jointType { get; init; }
 	public float cameraX { get; init; }
