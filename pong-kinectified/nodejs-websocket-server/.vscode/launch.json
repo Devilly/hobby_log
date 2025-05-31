@@ -5,19 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Current file",
-            "program": "${file}",
-            "request": "launch",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
-            "type": "node"
-        },
-        {
             "type": "node",
             "runtimeArgs": ["--force-node-api-uncaught-exceptions-policy=true"],
             "request": "launch",
-            "name": "WS server",
+            "name": "Start",
             "skipFiles": [
                 "<node_internals>/**"
             ],
