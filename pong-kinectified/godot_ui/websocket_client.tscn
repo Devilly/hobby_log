@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://oukcgjygutgu"]
+
+[ext_resource type="Script" uid="uid://c88lvg5n6u6u5" path="res://websocket_client.gd" id="1_ds0wr"]
+[ext_resource type="Script" uid="uid://n4njxo7ql13n" path="res://GlobalClass.cs" id="2_d4kh4"]
+
+[node name="WebsocketClient" type="Node2D"]
+script = ExtResource("1_ds0wr")
+
+[node name="GlobalClass" type="Node" parent="." node_paths=PackedStringArray("Video")]
+script = ExtResource("2_d4kh4")
+Video = NodePath("../Video")
+
+[node name="Video" type="Sprite2D" parent="."]
+position = Vector2(500, 375)
+scale = Vector2(0.5, 0.5)
+
+[connection signal="body_frame" from="." to="GlobalClass" method="ReceiveBodyFrame"]
+[connection signal="color_frame" from="." to="GlobalClass" method="ReceiveColorFrame"]
