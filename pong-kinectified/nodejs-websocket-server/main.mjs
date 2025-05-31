@@ -6,6 +6,8 @@ import { createServer } from 'http';
 import sharp from 'sharp';
 import { WebSocketServer, WebSocket } from 'ws';
 
+import config from 'config';
+
 const server = createServer();
 
 function createWebSocketServer() {
@@ -43,17 +45,26 @@ server.on('upgrade', function (request, socket, head) {
     }
 });
 
-server.listen(1337);
+const serverPort = config.get('serverSettings.port');
+server.listen(serverPort, () => {
+    console.log(`Server is listening on port ${serverPort}`);
+});
 
 if (kinect.open()) {
+    const inputWidth = config.get('kinectSettings.colorFrameSettings.inputSettings.width');
+    const inputHeight = config.get('kinectSettings.colorFrameSettings.inputSettings.height');
+    const inputChannels = config.get('kinectSettings.colorFrameSettings.inputSettings.channels');
+
+    const outputQuality = config.get('kinectSettings.colorFrameSettings.outputSettings.jpegQuality');
+
     kinect.on('multiSourceFrame', async frame => {
         // HANDLE COLOR DATA
         const inputBuffer = Uint8Array.from(frame.color.buffer);
         const sharpImage = sharp(inputBuffer, {
             raw: {
-                width: 1920,
-                height: 1080,
-                channels: 4
+                width: inputWidth,
+                height: inputHeight,
+                channels: inputChannels
             }
         });
 
@@ -62,7 +73,7 @@ if (kinect.open()) {
 
         // Reference: https://github.com/godotengine/godot/issues/22496
         const outputBuffer = await sharpImage.jpeg({
-            quality: 20
+            quality: outputQuality
         }).toBuffer();
 
         wssColor.clients.forEach(async function each(client) {
