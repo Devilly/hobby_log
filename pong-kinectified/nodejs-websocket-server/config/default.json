@@ -7,7 +7,12 @@
             "channels": 4
         },
         "outputSettings": {
-            "jpegQuality": 20
+            "jpegQuality": 10
+        }
+    },
+    "bodyFrameSettings": {
+        "exportSettings": {
+          "enabled": false
         }
     }
   },

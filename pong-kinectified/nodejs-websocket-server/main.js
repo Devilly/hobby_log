@@ -1,12 +1,13 @@
 import Kinect2 from 'kinect2';
 const kinect = new Kinect2();
 
-import { createServer } from 'http';
+import config from 'config';
 
+import { createServer } from 'http';
 import sharp from 'sharp';
 import { WebSocketServer, WebSocket } from 'ws';
 
-import config from 'config';
+import { BodyFrameExport } from './bodyFrameExport.js';
 
 const server = createServer();
 
@@ -50,6 +51,12 @@ server.listen(serverPort, () => {
     console.log(`Server is listening on port ${serverPort}`);
 });
 
+let bodyFrameExport = null;
+if (config.get('kinectSettings.bodyFrameSettings.exportSettings.enabled')) {
+    bodyFrameExport = new BodyFrameExport();
+    bodyFrameExport.start();
+}
+
 if (kinect.open()) {
     const inputWidth = config.get('kinectSettings.colorFrameSettings.inputSettings.width');
     const inputHeight = config.get('kinectSettings.colorFrameSettings.inputSettings.height');
@@ -75,6 +82,8 @@ if (kinect.open()) {
         const outputBuffer = await sharpImage.jpeg({
             quality: outputQuality
         }).toBuffer();
+        
+        console.log(`JPEG buffer size: ${outputBuffer.byteLength} bytes`);
 
         wssColor.clients.forEach(async function each(client) {
             if (client.readyState === WebSocket.OPEN) {
@@ -83,11 +92,17 @@ if (kinect.open()) {
         });
 
         // HANDLE BODY DATA
+        const bodiesJson = JSON.stringify({
+            bodies: frame.body.bodies
+        });
+
+        if (bodyFrameExport) {
+            bodyFrameExport.write(bodiesJson);
+        }
+
         wssBody.clients.forEach(async function each(client) {
             if (client.readyState === WebSocket.OPEN) {
-                client.send(JSON.stringify({
-                    bodies: frame.body.bodies
-                }));
+                client.send(bodiesJson);
             }
         });
     });
@@ -96,3 +111,24 @@ if (kinect.open()) {
         frameTypes: Kinect2.FrameType.body | Kinect2.FrameType.color
     });
 }
+
+function shutdown() {
+    console.log('Shutting down...');
+
+    if (bodyFrameExport) {
+        bodyFrameExport.close();
+        console.log('BodyFrameExport closed');
+    }
+
+    if (kinect) {
+        kinect.close();
+        console.log('Kinect closed');
+    }
+
+    console.log('Exiting...');
+    
+    process.exit(0);
+}
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
