@@ -8,6 +8,7 @@ import sharp from 'sharp';
 import { WebSocketServer, WebSocket } from 'ws';
 
 import { BodyFrameExport } from './bodyFrameExport.js';
+import { BodyFrameReplay } from './bodyFrameReplay.js';
 
 const server = createServer();
 
@@ -52,17 +53,33 @@ server.listen(serverPort, () => {
 });
 
 let bodyFrameExport = null;
-if (config.get('kinectSettings.bodyFrameSettings.exportSettings.enabled')) {
-    bodyFrameExport = new BodyFrameExport();
-    bodyFrameExport.start();
-}
+let bodyFrameReplay = null;
+const replayConfig = config.get('serverSettings.replay.body');
 
-if (kinect.open()) {
+if (replayConfig.enabled) {
+    bodyFrameReplay = new BodyFrameReplay();
+    bodyFrameReplay.start({
+        file: replayConfig.file,
+        intervalMs: replayConfig.intervalMs,
+        loop: replayConfig.loop,
+        wssBody
+    });
+} else if (kinect.open()) {
     const inputWidth = config.get('kinectSettings.colorFrameSettings.inputSettings.width');
     const inputHeight = config.get('kinectSettings.colorFrameSettings.inputSettings.height');
     const inputChannels = config.get('kinectSettings.colorFrameSettings.inputSettings.channels');
 
     const outputQuality = config.get('kinectSettings.colorFrameSettings.outputSettings.jpegQuality');
+
+    const bodyExportEnabled = config.get('kinectSettings.bodyFrameSettings.exportSettings.enabled');
+    const bodyExportDirectory = config.get('kinectSettings.bodyFrameSettings.exportSettings.directory');
+
+    if (bodyExportEnabled) {
+        bodyFrameExport = new BodyFrameExport();
+        bodyFrameExport.start({
+            exportDir: bodyExportDirectory
+        });
+    }
 
     kinect.on('multiSourceFrame', async frame => {
         // HANDLE COLOR DATA
@@ -114,19 +131,19 @@ if (kinect.open()) {
 
 function shutdown() {
     console.log('Shutting down...');
-
-    if (bodyFrameExport) {
-        bodyFrameExport.close();
-        console.log('BodyFrameExport closed');
+    if (bodyFrameReplay) {
+        bodyFrameReplay.stop();
+        console.log('BodyFrameReplay stopped');
     }
-
+    if (bodyFrameExport) {
+        bodyFrameExport.stop();
+        console.log('BodyFrameExport stopped');
+    }
     if (kinect) {
         kinect.close();
         console.log('Kinect closed');
     }
-
-    console.log('Exiting...');
-    
+    console.log('...done shutting down!');
     process.exit(0);
 }
 

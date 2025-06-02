@@ -12,11 +12,20 @@
     },
     "bodyFrameSettings": {
         "exportSettings": {
-          "enabled": false
+          "enabled": false,
+          "directory": "./body_exports"
         }
     }
   },
   "serverSettings": {
-    "port": 1337
+    "port": 1337,
+    "replay": {
+      "body": {
+        "enabled": false,
+        "file": "./body_exports/session_2025-06-02_10-59-52.jsonl",
+        "intervalMs": 33,
+        "loop": true
+      }
+    }
   }
 }

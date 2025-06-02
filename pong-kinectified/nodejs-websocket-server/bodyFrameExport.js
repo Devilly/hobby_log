@@ -5,16 +5,15 @@ import { format } from 'date-fns';
 
 export class BodyFrameExport {
     #sessionFileStream = null;
-    #sessionFilePath = null;
 
-    start(exportDir = './body_exports') {
+    start({ exportDir }) {
         const absExportDir = path.resolve(exportDir);
         if (!fs.existsSync(absExportDir)) {
             fs.mkdirSync(absExportDir, { recursive: true });
         }
         const sessionName = `session_${format(new Date(), 'yyyy-MM-dd_HH-mm-ss')}.jsonl`;
-        this.#sessionFilePath = path.join(absExportDir, sessionName);
-        this.#sessionFileStream = fs.createWriteStream(this.#sessionFilePath);
+        const sessionFilePath = path.join(absExportDir, sessionName);
+        this.#sessionFileStream = fs.createWriteStream(sessionFilePath);
     }
 
     write(json) {
@@ -23,11 +22,10 @@ export class BodyFrameExport {
         }
     }
 
-    close() {
+    stop() {
         if (this.#sessionFileStream) {
             this.#sessionFileStream.end();
             this.#sessionFileStream = null;
-            this.#sessionFilePath = null;
         }
     }
 }
