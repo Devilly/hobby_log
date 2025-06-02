@@ -8,6 +8,10 @@
         },
         "outputSettings": {
             "jpegQuality": 10
+        },
+        "exportSettings": {
+          "enabled": false,
+          "directory": "./color_exports"
         }
     },
     "bodyFrameSettings": {
@@ -22,7 +26,13 @@
     "replay": {
       "body": {
         "enabled": false,
-        "file": "./body_exports/session_2025-06-02_10-59-52.jsonl",
+        "file": null,
+        "intervalMs": 33,
+        "loop": true
+      },
+      "color": {
+        "enabled": false,
+        "file": null,
         "intervalMs": 33,
         "loop": true
       }
