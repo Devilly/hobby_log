@@ -1,5 +1,10 @@
-import Kinect2 from 'kinect2';
-let kinect = new Kinect2();
+let Kinect2 = null;
+let kinect = null;
+
+if (process.platform === 'win32') {
+    Kinect2 = (await import('kinect2')).default;
+    kinect = new Kinect2();
+}
 
 import config from 'config';
 
@@ -64,7 +69,7 @@ if (replayConfig.enabled) {
         loop: replayConfig.loop,
         wssBody
     });
-} else if (kinect.open()) {
+} else if (kinect && kinect.open()) {
     const inputWidth = config.get('kinectSettings.colorFrameSettings.inputSettings.width');
     const inputHeight = config.get('kinectSettings.colorFrameSettings.inputSettings.height');
     const inputChannels = config.get('kinectSettings.colorFrameSettings.inputSettings.channels');
@@ -127,6 +132,10 @@ if (replayConfig.enabled) {
     kinect.openMultiSourceReader({
         frameTypes: Kinect2.FrameType.body | Kinect2.FrameType.color
     });
+} else {
+    console.log('No working execution mode was enabled');
+
+    process.exit(0);
 }
 
 function shutdown() {
