@@ -4,7 +4,7 @@ import { sleep } from './sleep.js';
 import { WebSocket } from 'ws';
 
 export class BodyFrameReplay {
-    readline = null;
+    #readline = null;
     #wssBody = null;
     #intervalMs = null;
 
@@ -14,12 +14,12 @@ export class BodyFrameReplay {
         this.#intervalMs = intervalMs;
         this.#wssBody = wssBody;
         
-        this.readline = readline.createInterface({
+        this.#readline = readline.createInterface({
             input: fs.createReadStream(file),
             crlfDelay: Infinity
         });
 
-        for await (const line of this.readline) {
+        for await (const line of this.#readline) {
             this.#wssBody.clients.forEach(client => {
                 if (client.readyState === WebSocket.OPEN) {
                     client.send(line);
@@ -32,13 +32,15 @@ export class BodyFrameReplay {
             this.start(options);
         } else {
             this.stop();
+            
+            process.exit(0);
         }
     }
 
     stop() {
-        if (this.readline) {
-            this.readline.close();
-            this.readline = null;
+        if (this.#readline) {
+            this.#readline.close();
+            this.#readline = null;
         }
     }
 }

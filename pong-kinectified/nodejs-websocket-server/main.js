@@ -14,6 +14,8 @@ import { WebSocketServer, WebSocket } from 'ws';
 
 import { BodyFrameExport } from './bodyFrameExport.js';
 import { BodyFrameReplay } from './bodyFrameReplay.js';
+import { ImageFrameExport } from './imageFrameExport.js';
+import { ImageFrameReplay } from './imageFrameReplay.js';
 
 const server = createServer();
 
@@ -59,17 +61,38 @@ server.listen(serverPort, () => {
 
 let bodyFrameExport = null;
 let bodyFrameReplay = null;
-const replayConfig = config.get('serverSettings.replay.body');
+let imageFrameExport = null;
+let imageFrameReplay = null;
+const bodyReplayConfig = config.get('serverSettings.replay.body');
+const imageReplayConfig = config.get('serverSettings.replay.color');
 
-if (replayConfig.enabled) {
+let enableKinect = true;
+
+if (bodyReplayConfig.enabled) {
+    enableKinect = false;
+
     bodyFrameReplay = new BodyFrameReplay();
     bodyFrameReplay.start({
-        file: replayConfig.file,
-        intervalMs: replayConfig.intervalMs,
-        loop: replayConfig.loop,
+        file: bodyReplayConfig.file,
+        intervalMs: bodyReplayConfig.intervalMs,
+        loop: bodyReplayConfig.loop,
         wssBody
     });
-} else if (kinect && kinect.open()) {
+}
+
+if (imageReplayConfig.enabled) {
+    enableKinect = false;
+
+    imageFrameReplay = new ImageFrameReplay();
+    imageFrameReplay.start({
+        file: imageReplayConfig.file,
+        intervalMs: imageReplayConfig.intervalMs,
+        loop: imageReplayConfig.loop,
+        wssColor
+    });
+}
+
+if (enableKinect && kinect && kinect.open()) {
     const inputWidth = config.get('kinectSettings.colorFrameSettings.inputSettings.width');
     const inputHeight = config.get('kinectSettings.colorFrameSettings.inputSettings.height');
     const inputChannels = config.get('kinectSettings.colorFrameSettings.inputSettings.channels');
@@ -78,11 +101,20 @@ if (replayConfig.enabled) {
 
     const bodyExportEnabled = config.get('kinectSettings.bodyFrameSettings.exportSettings.enabled');
     const bodyExportDirectory = config.get('kinectSettings.bodyFrameSettings.exportSettings.directory');
+    const imageExportEnabled = config.get('kinectSettings.colorFrameSettings.exportSettings.enabled');
+    const imageExportDirectory = config.get('kinectSettings.colorFrameSettings.exportSettings.directory');
 
     if (bodyExportEnabled) {
         bodyFrameExport = new BodyFrameExport();
         bodyFrameExport.start({
             exportDir: bodyExportDirectory
+        });
+    }
+
+    if (imageExportEnabled) {
+        imageFrameExport = new ImageFrameExport();
+        imageFrameExport.start({
+            exportDir: imageExportDirectory
         });
     }
 
@@ -106,6 +138,10 @@ if (replayConfig.enabled) {
         }).toBuffer();
         
         console.log(`JPEG buffer size: ${outputBuffer.byteLength} bytes`);
+
+        if (imageFrameExport) {
+            imageFrameExport.write(outputBuffer);
+        }
 
         wssColor.clients.forEach(async function each(client) {
             if (client.readyState === WebSocket.OPEN) {
@@ -132,10 +168,6 @@ if (replayConfig.enabled) {
     kinect.openMultiSourceReader({
         frameTypes: Kinect2.FrameType.body | Kinect2.FrameType.color
     });
-} else {
-    console.log('No working execution mode was enabled');
-
-    process.exit(0);
 }
 
 function shutdown() {
@@ -147,6 +179,14 @@ function shutdown() {
     if (bodyFrameExport) {
         bodyFrameExport.stop();
         console.log('BodyFrameExport stopped');
+    }
+    if (imageFrameReplay) {
+        imageFrameReplay.stop();
+        console.log('ImageFrameReplay stopped');
+    }
+    if (imageFrameExport) {
+        imageFrameExport.stop();
+        console.log('ImageFrameExport stopped');
     }
     if (kinect) {
         kinect.close();
