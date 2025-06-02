@@ -1,5 +1,5 @@
 import Kinect2 from 'kinect2';
-const kinect = new Kinect2();
+let kinect = new Kinect2();
 
 import config from 'config';
 
@@ -143,7 +143,7 @@ function shutdown() {
         kinect.close();
         console.log('Kinect closed');
     }
-    console.log('...done shutting down!');
+    console.log('Shut down...');
     process.exit(0);
 }
 
