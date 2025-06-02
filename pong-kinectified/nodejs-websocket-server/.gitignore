@@ -1,2 +1,3 @@
 node_modules
 body_exports
+config/local*.json
