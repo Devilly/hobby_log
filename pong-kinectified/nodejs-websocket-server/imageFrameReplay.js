@@ -1,5 +1,9 @@
 import fs from 'fs';
 import readline from 'readline';
+import { sleep } from './util/sleep.js';
+import { WebSocket } from 'ws';
+import config from 'config';
+import { findFirstJsonlFile } from './util/findFirstJsonlFile.js';
 
 export class ImageFrameReplay {
     #readline = null;
@@ -7,10 +11,15 @@ export class ImageFrameReplay {
     #intervalMs = null;
 
     async start(options) {
-        const { file, intervalMs, loop, wssColor } = options;
+        let { file, intervalMs, loop, wssColor } = options;
 
         this.#intervalMs = intervalMs;
         this.#wssColor = wssColor;
+
+        if (!file) {
+            const exportDir = config.get('kinectSettings.colorFrameSettings.exportSettings.directory');
+            file = findFirstJsonlFile(exportDir);
+        }
 
         this.#readline = readline.createInterface({
             input: fs.createReadStream(file),

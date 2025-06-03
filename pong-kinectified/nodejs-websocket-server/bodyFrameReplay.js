@@ -1,7 +1,9 @@
 import fs from 'fs';
 import readline from 'readline';
-import { sleep } from './sleep.js';
+import { sleep } from './util/sleep.js';
 import { WebSocket } from 'ws';
+import { findFirstJsonlFile } from './util/findFirstJsonlFile.js';
+import config from 'config';
 
 export class BodyFrameReplay {
     #readline = null;
@@ -9,10 +11,15 @@ export class BodyFrameReplay {
     #intervalMs = null;
 
     async start(options) {
-        const { file, intervalMs, loop, wssBody } = options;
+        let { file, intervalMs, loop, wssBody } = options;
 
         this.#intervalMs = intervalMs;
         this.#wssBody = wssBody;
+
+        if (!file) {
+            const exportDir = config.get('kinectSettings.bodyFrameSettings.exportSettings.directory');
+            file = findFirstJsonlFile(exportDir);
+        }
         
         this.#readline = readline.createInterface({
             input: fs.createReadStream(file),
