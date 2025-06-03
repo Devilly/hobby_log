@@ -1,3 +1,4 @@
 node_modules
 body_exports
+color_exports
 config/local*.json
