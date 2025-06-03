@@ -1,5 +1,7 @@
 {
   "kinectSettings": {
+    "enabled": true,
+    
     "colorFrameSettings": {
         "inputSettings": {
             "width": 1920,

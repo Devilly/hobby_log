@@ -66,11 +66,7 @@ let imageFrameReplay = null;
 const bodyReplayConfig = config.get('serverSettings.replay.body');
 const imageReplayConfig = config.get('serverSettings.replay.color');
 
-let enableKinect = true;
-
 if (bodyReplayConfig.enabled) {
-    enableKinect = false;
-
     bodyFrameReplay = new BodyFrameReplay();
     bodyFrameReplay.start({
         file: bodyReplayConfig.file,
@@ -81,8 +77,6 @@ if (bodyReplayConfig.enabled) {
 }
 
 if (imageReplayConfig.enabled) {
-    enableKinect = false;
-
     imageFrameReplay = new ImageFrameReplay();
     imageFrameReplay.start({
         file: imageReplayConfig.file,
@@ -92,7 +86,7 @@ if (imageReplayConfig.enabled) {
     });
 }
 
-if (enableKinect && kinect && kinect.open()) {
+if (config.get('kinectSettings.enabled') && kinect?.open()) {
     const inputWidth = config.get('kinectSettings.colorFrameSettings.inputSettings.width');
     const inputHeight = config.get('kinectSettings.colorFrameSettings.inputSettings.height');
     const inputChannels = config.get('kinectSettings.colorFrameSettings.inputSettings.channels');
@@ -136,18 +130,20 @@ if (enableKinect && kinect && kinect.open()) {
         const outputBuffer = await sharpImage.jpeg({
             quality: outputQuality
         }).toBuffer();
-        
+
         console.log(`JPEG buffer size: ${outputBuffer.byteLength} bytes`);
 
         if (imageFrameExport) {
             imageFrameExport.write(outputBuffer);
         }
 
-        wssColor.clients.forEach(async function each(client) {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(outputBuffer);
-            }
-        });
+        if (!imageReplayConfig.enabled) {
+            wssColor.clients.forEach(async function each(client) {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(outputBuffer);
+                }
+            });
+        }
 
         // HANDLE BODY DATA
         const bodiesJson = JSON.stringify({
@@ -158,11 +154,13 @@ if (enableKinect && kinect && kinect.open()) {
             bodyFrameExport.write(bodiesJson);
         }
 
-        wssBody.clients.forEach(async function each(client) {
-            if (client.readyState === WebSocket.OPEN) {
-                client.send(bodiesJson);
-            }
-        });
+        if (!bodyReplayConfig.enabled) {
+            wssBody.clients.forEach(async function each(client) {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(bodiesJson);
+                }
+            });
+        }
     });
 
     kinect.openMultiSourceReader({
