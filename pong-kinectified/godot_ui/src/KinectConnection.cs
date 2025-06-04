@@ -2,6 +2,7 @@ using Godot;
 using System.Text.Json;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 [GlobalClass]
 public partial class KinectConnection : Node
@@ -9,12 +10,16 @@ public partial class KinectConnection : Node
 	[Export]
 	public Sprite2D Video;
 
+	private KinectServerConfig config;
+
 	private WebSocketPeer bodyClient = new();
 	private WebSocketPeer colorClient = new();
 
 	public override void _Ready()
 	{
-		var urlBase = "ws://127.0.0.1:1337";
+		config = LoadKinectConfig();
+
+		var urlBase = config.UrlBase;
 		bodyClient.ConnectToUrl($"{urlBase}/body");
 		colorClient.ConnectToUrl($"{urlBase}/color");
 	}
@@ -82,5 +87,16 @@ public partial class KinectConnection : Node
 			from joint in body.joints
 			where joint.jointType == 3
 			select joint;
+	}
+
+	private static KinectServerConfig LoadKinectConfig()
+	{
+		var config = new ConfigurationBuilder()
+			.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+			.Build();
+
+		var appSettings = config.GetSection(KinectServerConfig.Name).Get<KinectServerConfig>();
+
+		return appSettings;
 	}
 }
